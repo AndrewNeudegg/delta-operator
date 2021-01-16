@@ -1,0 +1,7 @@
+apiVersion: routing.andrewneudegg.com/v1
+kind: Delta
+metadata:
+  name: delta-sample
+spec:
+  # Add fields here
+  foo: bar

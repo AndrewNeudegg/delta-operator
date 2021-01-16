@@ -1,0 +1,20 @@
+# permissions for end users to view delta.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: delta-viewer-role
+rules:
+- apiGroups:
+  - routing.andrewneudegg.com
+  resources:
+  - delta
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - routing.andrewneudegg.com
+  resources:
+  - delta/status
+  verbs:
+  - get
