@@ -42,7 +42,7 @@ type DeltaSpec struct {
 	// Count specifies the number of replicas.
 	Count int `json:"count,omitempty"`
 	// Spec for the generated pods.
-	Spec corev1.Pod `json:"spec,omitempty"`
+	Spec corev1.PodSpec `json:"spec,omitempty"`
 }
 
 // DeltaStatus defines the observed state of Delta
