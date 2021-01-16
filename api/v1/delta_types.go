@@ -17,6 +17,7 @@ limitations under the License.
 package v1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -35,10 +36,15 @@ type DeltaSpec struct {
 	// PodAnnotations are applied to the generated pods.
 	PodAnnotations map[string]string `json:"podAnnotations,omitempty"`
 	// ConfigMaps gives users the chance to mount a config map into the pods.
-	ConfigMaps map[string]string `json:"configMaps,omitempty"`
+	ConfigMaps corev1.EnvFromSource `json:"configMaps,omitempty"`
 	// Secrets gives users the chance to mount a secret into the pods.
-	Secrets map[string]string `json:"secrets,omitempty"`
+	Secrets corev1.SecretEnvSource `json:"secrets,omitempty"`
+	// Count specifies the number of replicas.
+	Count int `json:"count,omitempty"`
+	// Spec for the generated pods.
+	Spec corev1.Pod `json:"spec,omitempty"`
 }
+
 // DeltaStatus defines the observed state of Delta
 type DeltaStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
