@@ -1,0 +1,76 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: delta.routing.andrewneudegg.com
+spec:
+  group: routing.andrewneudegg.com
+  names:
+    kind: Delta
+    listKind: DeltaList
+    plural: delta
+    singular: delta
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: Delta is the Schema for the delta API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: DeltaSpec defines the desired state of Delta
+            properties:
+              config:
+                description: Config contains the core pipeline configs.
+                type: string
+              configMaps:
+                additionalProperties:
+                  type: string
+                description: ConfigMaps gives users the chance to mount a config map
+                  into the pods.
+                type: object
+              image:
+                description: Specifies the image and pull repository.
+                type: string
+              podAnnotations:
+                additionalProperties:
+                  type: string
+                description: PodAnnotations are applied to the generated pods.
+                type: object
+              secrets:
+                additionalProperties:
+                  type: string
+                description: Secrets gives users the chance to mount a secret into
+                  the pods.
+                type: object
+            type: object
+          status:
+            description: DeltaStatus defines the observed state of Delta
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

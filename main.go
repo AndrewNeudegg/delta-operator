@@ -70,6 +70,7 @@ func main() {
 		MetricsBindAddress:     metricsAddr,
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
+		LeaderElectionNamespace: "default",
 		LeaderElection:         enableLeaderElection,
 		LeaderElectionID:       "67364314.andrewneudegg.com",
 	})

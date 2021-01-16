@@ -18,13 +18,15 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
+	routingv1 "github.com/andrewneudegg/delta-operator/api/v1"
 	"github.com/go-logr/logr"
+	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	routingv1 "github.com/andrewneudegg/delta-operator/api/v1"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
 )
 
 // DeltaReconciler reconciles a Delta object
@@ -48,8 +50,45 @@ type DeltaReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.7.0/pkg/reconcile
 func (r *DeltaReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = r.Log.WithValues("delta", req.NamespacedName)
+	log := r.Log.WithValues("delta", req.NamespacedName)
 
+	deltaList := &routingv1.DeltaList{}
+	err := r.List(ctx, deltaList, &client.ListOptions{
+		LabelSelector: nil,
+		FieldSelector: nil,
+		Namespace:     req.Namespace,
+		Limit:         0,
+		Continue:      "",
+	})
+	if err != nil {
+		log.Error(err, "could not list deltas in ", req.Namespace)
+		return ctrl.Result{}, nil
+	}
+
+	var deltaItem *routingv1.Delta
+	for _, dI := range deltaList.Items {
+		if dI.Name == req.Name {
+			deltaItem = &dI
+		}
+	}
+	if deltaItem == nil {
+		log.Info("was deleted")
+		return ctrl.Result{}, nil
+	}
+
+
+
+	delta := &routingv1.Delta{}
+	err = r.Get(ctx, req.NamespacedName, delta)
+	if err != nil {
+		log.Error(err, fmt.Sprintf("could not find '%s'", req.NamespacedName))
+		return ctrl.Result{
+			Requeue:      false,
+			RequeueAfter: 0,
+		}, nil
+	}
+
+	log.Info(delta.Spec.Config)
 	// your logic here
 
 	return ctrl.Result{}, nil
@@ -59,5 +98,9 @@ func (r *DeltaReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 func (r *DeltaReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&routingv1.Delta{}).
+		Owns(&appsv1.Deployment{}).
+		WithOptions(controller.Options{
+			MaxConcurrentReconciles: 2,
+		}).
 		Complete(r)
 }

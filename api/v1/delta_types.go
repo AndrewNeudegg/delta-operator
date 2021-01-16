@@ -28,10 +28,17 @@ type DeltaSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Delta. Edit Delta_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Specifies the image and pull repository.
+	Image string `json:"image,omitempty"`
+	// Config contains the core pipeline configs.
+	Config string `json:"config,omitempty"`
+	// PodAnnotations are applied to the generated pods.
+	PodAnnotations map[string]string `json:"podAnnotations,omitempty"`
+	// ConfigMaps gives users the chance to mount a config map into the pods.
+	ConfigMaps map[string]string `json:"configMaps,omitempty"`
+	// Secrets gives users the chance to mount a secret into the pods.
+	Secrets map[string]string `json:"secrets,omitempty"`
 }
-
 // DeltaStatus defines the observed state of Delta
 type DeltaStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster

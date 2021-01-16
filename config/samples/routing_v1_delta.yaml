@@ -3,5 +3,37 @@ kind: Delta
 metadata:
   name: delta-sample
 spec:
-  # Add fields here
-  foo: bar
+  image: "andrewneudegg/delta:0.0.2"
+  podAnnotations:
+    andrewneudegg.com/annotation: "something,something-else"
+  config: |
+    applicationSettings: {}
+    pipeline:
+      # This first pipeline generates and emits http events.
+      - id: pipelines/fipfo
+        config:
+          input:
+            - id: utilities/generators/v1
+              config:
+                interval: 10s
+                numberEvents: 10000
+                numberCollections: 1
+          output:
+            - id: http/v1
+              config:
+                targetAddress: http://localhost:8080
+
+      # This second pipeline consumes those events and writes to stdout.
+      - id: pipelines/fipfo
+        config:
+          input:
+            - id: http/v1
+              config:
+                listenAddress: :8080
+                maxBodySize: 1000000 # 1mb
+          output:
+            - id: utilities/performance/v1
+              config:
+                sampleWindow: 60s
+              nodes:
+                - id: utilities/console/v1
