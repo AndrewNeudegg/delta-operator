@@ -29,20 +29,22 @@ type DeltaSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Specifies the image and pull repository.
-	Image string `json:"image,omitempty"`
-	// Config contains the core pipeline configs.
-	Config string `json:"config,omitempty"`
-	// PodAnnotations are applied to the generated pods.
-	PodAnnotations map[string]string `json:"podAnnotations,omitempty"`
-	// ConfigMaps gives users the chance to mount a config map into the pods.
-	ConfigMaps corev1.EnvFromSource `json:"configMaps,omitempty"`
-	// Secrets gives users the chance to mount a secret into the pods.
-	Secrets corev1.SecretEnvSource `json:"secrets,omitempty"`
+	// Name specifies the name of the created delta cluster.
+	Name string `json:"name,omitempty"`
 	// Count specifies the number of replicas.
-	Count int `json:"count,omitempty"`
+	Count int32 `json:"count,omitempty"`
 	// Spec for the generated pods.
-	Spec corev1.PodSpec `json:"spec,omitempty"`
+	Template corev1.PodTemplateSpec `json:"template,omitempty"`
+	// DeltaConfig contains the core pipeline configs.
+	DeltaConfig string `json:"deltaConfig,omitempty"`
+
+	// Image string `json:"image,omitempty"`
+	// // PodAnnotations are applied to the generated pods.
+	// PodAnnotations map[string]string `json:"podAnnotations,omitempty"`
+	// // ConfigMaps gives users the chance to mount a config map into the pods.
+	// ConfigMaps corev1.EnvFromSource `json:"configMaps,omitempty"`
+	// // Secrets gives users the chance to mount a secret into the pods.
+	// Secrets corev1.SecretEnvSource `json:"secrets,omitempty"`
 }
 
 // DeltaStatus defines the observed state of Delta

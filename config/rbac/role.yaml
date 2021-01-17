@@ -7,6 +7,32 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
+  - apps/v1
+  resources:
+  - deployment
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps/v1
+  resources:
+  - deployment/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - apps/v1
+  resources:
+  - deployment/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - routing.andrewneudegg.com
   resources:
   - delta

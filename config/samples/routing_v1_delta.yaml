@@ -3,10 +3,16 @@ kind: Delta
 metadata:
   name: delta-sample
 spec:
-  image: "andrewneudegg/delta:0.0.2"
-  podAnnotations:
-    andrewneudegg.com/annotation: "something,something-else"
-  config: |
+  count: 2
+  name: delta-example
+  template:
+    spec:
+      containers:
+        - name: delta
+          image: andrewneudegg/delta:0.0.2
+      imagePullSecrets: []
+
+  deltaConfig: |
     applicationSettings: {}
     pipeline:
       # This first pipeline generates and emits http events.
